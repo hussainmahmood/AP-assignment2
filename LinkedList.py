@@ -1,20 +1,5 @@
 from functools import wraps
 
-def ensure_node_exists(func):
-    @wraps(func)
-    def wrapper(self, index, *args, **kwargs):
-        n = self.head
-        pos = 0
-        while(n != None and pos != index):
-            pos += 1
-            n = n.next
-        
-        if not n:
-            raise Exception("Index not present")
-                
-        return func(self, index, *args, **kwargs)        
-        
-    return wrapper
 
 class Node:
     def __init__(self, data):
@@ -25,6 +10,21 @@ class Node:
 class LinkedList:
     def __init__(self):
         self.head = None
+
+    def ensure_node_exists(func):
+        @wraps(func)
+        def wrapper(self, index, *args, **kwargs):
+            n = self.head
+            pos = 0
+            while(n != None and pos != index):
+                pos += 1
+                n = n.next
+            if n:
+                return func(self, index, *args, **kwargs)
+                
+            print("Index not present")        
+
+        return wrapper
     
     def __repr__(self):
         n = self.head
